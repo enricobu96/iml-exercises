@@ -1,0 +1,52 @@
+---
+title: "Exercise Set 0: Prerequisite Knowledge"
+author: "Enrico Buratto"
+date: "4/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1
+### Task a
+
+```{r}
+x <- read.csv("./x.csv")
+variances <- sapply(x, var)
+variances <- variances[order(variances, decreasing = TRUE)]
+first <- x[names(variances[1])]
+second <- x[names(variances[2])]
+to_plot <- data.frame(first, second)
+plot(to_plot)
+```
+
+## Problem 2
+### Task a
+
+### Task b
+
+## Problem 3
+
+### Task a
+
+### Task b
+
+## Problem 4
+
+### Task a
+
+### Task b
+
+## Problem 5
+
+### Task a
+
+### Task b
+
+## Problem 6
+
+### Task a
+
+### Task b

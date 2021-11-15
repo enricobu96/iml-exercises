@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  15 NOV 2021 16:50
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  15 NOV 2021 22:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -886,14 +886,17 @@ Overfull \hbox (8.19054pt too wide) in alignment at lines 452--465
 [6] [7]
 File: img/diagram_measures.png Graphic file (type bmp)
 <img/diagram_measures.png>
-[8] [9] (./doc.aux) ) 
+[8]
+File: img/real_data_comp.png Graphic file (type bmp)
+<img/real_data_comp.png>
+[9] [10] [11] (./doc.aux) ) 
 Here is how much of TeX's memory you used:
- 18468 strings out of 476919
- 324223 string characters out of 5827674
- 827703 words of memory out of 5000000
- 38178 multiletter control sequences out of 15000+600000
+ 18483 strings out of 476919
+ 324435 string characters out of 5827674
+ 827907 words of memory out of 5000000
+ 38192 multiletter control sequences out of 15000+600000
  409865 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  98i,7n,122p,508b,397s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on doc.pdf (9 pages).
+Output written on doc.pdf (11 pages).

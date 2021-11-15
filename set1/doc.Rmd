@@ -321,19 +321,92 @@ In order to make these models perform better, a good idea is to tweak the models
 
 ### Task b
 
+I'm not reporting the code because it's very messy (for my fault) and too long, but I reused some parts of code from the previous exercises. The code I used works like this:
+1. Firstly, I generated 1000 training sets with the same code reported above, and 1000 test sets, each composed by only one point (the `(0, f(0))` pair)
+2. Secondarily, for every degree from 0 to 10 I iterate on the 1000 training sets and, for every set, I compute the coefficients (the $\beta$) and then I calculate the irreducible error, the bias term and the variance term for that set in particular, and I add them to a cumulative variable
+3. Every iteration on the degree, after calculating all the terms, I memorize them into an array
+4. Lastly, I calculate for each `i` from 0 to 10 the squared loss term adding the previous three variables
 
+The plot I got is this; the blue line is the bias, the orange line is the irreducible error, the green line is the variance and the red line is the squared loss:
+
+![Bias, irreducible error, variance and squared loss](img/real_data_comp.png){width=300px}
+
+The results are more or less what I expected, with the exception of the irreducible error: with a more flexible model, in fact, the bias decreases, while the variance increase. The irreducible error, though, should be more stable since it's a constant: probably, the cause must be sought in the fact that the $\epsilon$ added to $f(0)$ is random every time, since it's difficult to stabilize the graph for so small values.
 
 ## Problem 5
 
 ### Task a
 
-We know that $MSE = E[(\hat{\beta} −\beta)^2] = bias^2 + variance$, and we know that the generalization error for the OLS regression is $$\frac{\sum_{i\in test}^{m}(y_i-\hat{y}_i)^2}{m}$$ for $m$ number of samples in the test set. Since $y_i$ are actually observations in the test set, the last formula is exactly the variance of the model, that is $L_{test}$. Thus, since $MSE = bias^2 + variance$, bias has to be equal to zero, and then $L_{test}$ is an unbiased estimate of the generalization error for the OLS regression.
+In order to prove that $L_{test}$ is an unbiased estimate of the generalization error for the OLS regression, we have to demostrate that the estimate of $L_{test}$ is equal to the estimate of the generalization error. Formally, we have to prove that $$E\left [\frac{1}{m}\sum_{i=1}^{m}(\bar{y}_i - \hat{\beta}^T\bold{x}_i)^2\right ] = E\left[\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2 \right ]$$.
+For lineartity of expectation we can write $$E\left [\frac{1}{m}\sum_{i=1}^{m}(\bar{y}_i - \hat{\beta}^T\bold{x}_i)^2\right ] = \frac{1}{m}\sum_{i=1}^{m}E\left [(\bar{y}_i - \hat{\beta}^T\bold{x}_i)^2\right ]$$
+Watching closely the summation, we can see that $$\sum_{i=1}^{m}E\left [(\bar{y}_i - \hat{\beta}^T\bold{x}_i)^2\right ] = E\left [(\bar{y}_1 - \hat{\beta}^T\bold{x}_1)^2\right ] + \dots + E\left [(\bar{y}_n - \hat{\beta}^T\bold{x}_n)^2\right ]$$
+Now, we know that $E[y_i] = E[y]\ \forall i$ and that $\hat{\beta}^T\bold{x}=\hat{y}$; then, the equation above is equal to $$mE\left [(y-\hat{y}^2)\right ]$$ but the previous summation was also multiplied by $\frac{1}{m}$, so we just proved that $$E[L_{test}] = E[(y-\hat{y}^2)]$$ and this concludes my proof.
 
 ### Task b
 
-We know that $$ E[L_{train}] = E\left [\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{\beta}^T\bar{\bold{x}}_i)^2\right ]$$ and, since it's biased, it is equal to $$\left (1-\frac{1}{n}\right )\sigma^2$$
-$E[L_{test}]$, on the other hand, corresponds with the variance, i.e. $\sigma^2$. It's trivial to see then that $$ \left (1-\frac{1}{n}\right )\sigma^2\leq\sigma^2$$
+First of all, we can expand $E[L_{train}] \leq E[L{test}]$ to the disequation $$ E\left [\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{\beta}^T\bold{x}_i)^2\right ] \leq E\left [\frac{1}{m}\sum_{i=1}^{m}(\bar{y}_i - \hat{\beta}^T\bold{x}_i)^2\right ]$$
+
+From this disequation we can see that the only term that can make it true is $\hat{\beta}^T$, and we know that $\hat{\beta}^T$ is the vector of coefficients that best fit the training set, i.e. minimizes the loss; hence, $\hat{\beta}^T$ for the training set is surely less or equal to the $\hat{\beta}^T$ for the test set for definition, and this concludes my proof.
 
 ### Task c
 
 The result of task b says that the expectation of the train MSE is at most equal to the test MSE, but it's usually lower. This relates to the generalization problem in machine learning since it means that a tradeoff has to be found between bias and variance so that the model is neither too fitting to training data (overfitting), nor too general (underfitting).
+
+## Problem 6
+
+### Task a
+
+In order to find the t-statistics and the confidence interval for the function, I used more or less the same code of exercise 2:
+
+```python
+data = create_dataset(100)
+
+y_pred = [np.mean(data['y']) for i in data['y']]
+difference = data['y'] - y_pred
+t_value = (np.mean(difference))/(difference.std(ddof=1)/np.sqrt(len(difference)))
+std = difference.std(ddof=1)
+```
+
+This code gave me the following results:
+
+- _mean_ = -0.008988643465201451
+- _t statistics_ = 1.2341201755971243e-16
+- _standard deviance_ = 1.6092657440243914
+
+Using the formula $$\left [ \hat{\beta}-2SE(\hat{\beta}),\hat{\beta}+2SE(\hat{\beta}) \right ]$$
+to calculate the confidence interval, the result is then an interval equal to $[−3,227520132; 3,209542845]$
+Even though the mean, i.e. the function with degree equal to 0, is very close to 0, the confidence interval is very higher and then it's not possible to assert the the mean is zero.
+
+### Task b
+
+I executed the code from the previous task expanded in order to work with polynomials with degree more than zero: 
+
+```python
+degrees = [1,2,3,5]
+for degree in degrees:
+    betas = ols(training['x'], training['y'], degree)
+    line_y = np.array([f(xi, betas) for xi in training['x']])
+    difference = training['y'] - line_y
+    t_value = (np.mean(difference))/(difference.std(ddof=1)/np.sqrt(len(difference)))
+    std = difference.std(ddof=1)
+    mean = np.mean(training['y'])
+    confless = mean - 2*std
+    confmore = mean + 2*std
+```
+
+The results I got are here reported:
+
+| Degree | t value | STD | Confidence interval |
+|---|---|---|---|
+| 1 | 1.7228090336592154e-16 | 1.7291765516049669 | [ -4.098783707407138 , 2.817922499012729 ] |
+| 2 | 3.761045812674392e-16 | 1.1221102509036978 | [ -2.8846511060045996 , 1.6037898976101912 ] |
+| 3 | 3.5723167658142145e-16 | 0.5559493888121527 | [ -1.7523293818215098 , 0.4714681734271011 ] |
+| 5 | 1.0034689099035984e-13 | 0.5554022769450371 | [ -1.7512351580872785 , 0.47037394969286983 ] |
+
+## Problem 7
+
+From this exercise set and from the course until now I received first of all a perspective of what Machine Learning is and the contexts where it can be applied. Coming to more specific contents, I learned the foundations of Machine Learning, i.e. the in-depth definition of what supervised learning is and what linear regression is. I also learned how linear regression works, i.e. OLS, polynomial and multivariate regression, and how to measure the performance of a model, i.e. the concepts of bias and variance, irreducible error, generalized error, cross validation loss.
+
+Talking of what I didn't understand, I still have some problems with statistical concepts like expected values, estimation of confidence intervals and so on; I think I understood the concepts behind, but I still have some trouble applying them from a mathematical perspective.
+
+I think everything we have done until now is the foundations of Machine Learning, then I think that everything is relevant for other studies and future work (at least for me, since I would like to work in this field).

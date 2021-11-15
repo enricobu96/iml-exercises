@@ -7,45 +7,33 @@ output:
 
 ## Problem 1
 
-
-These taks are solved using Python with the following libraries: `numpy`, `pandas`, `matplotlib`, `seaborn`, `npf`.
-
 ### Task a and Task b
 
-*Task a* and *Task b* are trivial, the code is not reported as asked in grading instructions. After dataset loading, though, the dataframe obtained has the following `shape`: `458 rows × 103 columns`.
+*Task a* and *Task b* are trivial, hence the code is not reported. After dataset loading, though, the dataframe I obtained has the following shape: `458 rows × 103 columns`.
 
 ### Task c
 
-With regards to *Task c*, applying the `describe()` function gave a dataframe with `shape` equals to `8 rows x 101 columns`; the rows coincide with the typical describe variables:
-
-- count
-- mean
-- std
-- min
-- 25% 
-- 50%
-- 75%
-- max
+With regards to *Task c*, applying the `describe()` function gave a dataframe with shape equals to `8 rows x 101 columns`; the rows coincide with the typical description variables: `count`, `mean`, `std`, `min`, `25%`, `50%`, `75%`, `max`.
 
 Then, I applied the function `pairplot` from seaborn library:
 ```python
 sns.pairplot(npf, hue='class4', vars=npf.columns[2:12], kind='reg')
 ```
-With the following result:
+This returned the following result:
 
-![Result of pariplot function](img/first_graph.png){width=300px}
+![Result of pariplot function](img/first_graph.png){width=400px}
 
 Secondarily, I applied the function `boxplot` from seaborn library:
 ```python
 sns.boxplot(x='class2', y='CS.mean', data=npf)
 ```
-With the following result:
+This returned the following result:
 
-![Result of first boxplot function](img/second_graph.png){width=250px}
+![Result of first boxplot function](img/second_graph.png){width=280px}
 
 Finally, I created a new qualitative variable as asked. The `describe` command reports a number of 458 *event days*, and the last boxplot function (`sns.boxplot(x='class2', y='CS.mean', data=npf)`) returns this output:
 
-![Result of second boxplot function](img/third_graph.png){width=250px}
+![Result of second boxplot function](img/third_graph.png){width=280px}
 
 Coming to the personal implementation of histograms, I used `matplotlib` to plot four histograms on quantitative variables with different number of bins. The following code
 ```python
@@ -58,22 +46,35 @@ axs[1][1].hist(npf['NOx336.mean'], bins=6)
 
 plots these four histograms:
 
-![Histograms with matplotlib](img/casual_hist.png){width=250px}
+![Histograms with matplotlib](img/casual_hist.png){width=320px}
 
 \newpage
 
-Doing other exploratory analysis on the data, I found out that many of the variables have little-to-no variance, while there are mainly three of them that have a huge variance in the dataset; these variables are:
+Doing other _exploratory data analysis_ on the given dataset, I found out that many of the variables have little-to-no variance, while there are mainly four of them that have a huge variance in the dataset; these variables are:
 
 - PAR
 - NET
 - GLOB
 - SWS
 
-This phenomenon can be seen in the following pie chart:
+This phenomenon can be seen also in the following pie chart:
 
 ![Example of pie chart](img/pie_chart.png){width=320px}
 
-\newpage
+In order to obtain this pie chart, I used the following code:
+
+```python
+diff = []
+labels = []
+for i in npf:
+    if(npf[i].dtype.name != 'category' and 'std' not in i):
+        diff.append(npf[i].max() - npf[i].min())
+        labels.append(i)
+
+diff = diff[1:]
+labels = labels[1:]
+plt.pie(diff, labels=labels)
+```
 
 ## Problem 2
 
@@ -101,7 +102,7 @@ test = create_dataset(1000)
 
 ### Task b and Task c
 
-I implemented from scratch OLS functions; these are the following:
+I implemented from scratch linear regression functions; these are the following:
 
 ```python
 def transform_x(x, degree):
@@ -158,16 +159,16 @@ for degree in degrees:
     mses.append(calculate_mse(degree, betas, training))
 ```
 
-This code calculates the MSE with the function `calculate_mse` for every degree from 0 to 10. I applied the same code for Task C, just substituting `training` variable with `validation` and `test`.
+This code calculates the MSE with the function `calculate_mse` for every degree from 0 to 10. I applied the same code for Task c, just substituting `training` variable with `validation` and `test`.
 
 I'm not reporting every graph due to brevity, but these are the two graphs for, respectively, degree=1 and degree=10 on the training set.
 
 ![Function on training set with degree=1](img/deg1.png){width=300px}
 ![Function on training set with degree=10](img/deg10.png){width=300px}
 
-The MSE results are reported in the end of this exercise's section.
+The MSE results are reported at the end of this exercise's section.
 
-### Task D and Task E
+### Task d and Task e
 
 In order to calculate the cross-validation loss I used the following code:
 
@@ -209,7 +210,8 @@ for degree in range(0,10):
     cv/=10
 ```
 
-The `cv_split` function splits the data into `folds` folds, and returns the splits as a list. Then, I used the function and I computed the cross validation loss for every degree from 0 to 10; I got the best result with a polynomial with degree equal to five (cv loss equal to 0.109). The other results are reported in the table in the section below.
+The `cv_split` function splits the data into `folds` folds, and returns the splits as a list. Then, I used the function and I computed the cross validation loss for every degree from 0 to 10; I got the best result with a polynomial with degree equal to two (cross validation loss equal to 0.111). This was predictable, since the artificial data has been generated with a quadratic function.
+The other results are reported in the table in the section below.
 
 ### Table of results
 
@@ -227,13 +229,13 @@ The `cv_split` function splits the data into `folds` folds, and returns the spli
 | 9 | 0.078774 | 2092.939926 | 3354.972441 | 1677.5100 | 1863.8999 |
 | 10 | 0.072277 | 6718.510395 | 11094.152098 | 5547.0997 | 6163.443 |
 
-### Task F
+### Task f
 
-Using the table constructed, it is pretty clear that the best models are the polynomials with degree equal to 3 and equal to 4; they both have, in fact, the lowest cross validation loss and MSE for the training+validation set (calculated on the test set).
+Using the table constructed, it is pretty clear that the best model is the polynomial with degree equals to two; this, as said in the previous section, was predictable, since the data was generated by a quadratic function ($f(x)= 1 + x − \frac{x^2}{2}$).
 
 ## Problem 3
 
-### Task A and Task B
+### Task a and Task b
 
 I chose Ridge as the other regression model implemented, though it is not so much different from simple linear regression for a dataset like this (there's no high dimensionality of data, since there are only 22 columns and 7590 rows).
 I implemented these methods using the `scikit-learn` library. I'm not reporting the entire code due to brevity, but it is pretty similar to the regression example below:
@@ -263,9 +265,10 @@ rmse_train = np.sqrt(
 
 For each model I calculated the RMSE both on test and train set; the results are reported in the table at the end of this exercise's section.
 
-### Task C
+### Task c
 
-I implemented the 10-fold cross-validation losses joining the code from Exercise 2 and the code here above. Also in this case, the code is pretty similar to the regression example below:
+I implemented the 10-fold cross-validation losses joining the code from Exercise 2 and the code here above; I could have also used pre-implemented functions from `scikit-learn`, but since I already had this code I used it.
+Also in this case, the code is pretty similar to the regression example below:
 
 ```python
 kf = KFold(n_splits=10)
@@ -295,11 +298,12 @@ The results are reported in the table at the end of this exercise's section as w
 | SVM | 3.211369069051392 | 3.014713257799681 | 11.058880968944521 |
 | Ridge | 1.8065227008021323 | 1.197506935478486 | 2.2091122109416226 |
 
-### Task D
+### Task d
 
-As I can see from the results, the best regressor over all is random forest, since both RMSE on test set and cross validation loss are very low.
-The RMSE on training data is lower in every examined case; this was quite predictable, since it's clear that the model trained on the training set is not perfectly suitable also for data on the test set. It's a good sign, though, that for the most part of the regressor it's lower but not too much; this means that a correct tradeoff between bias and variance has been found.
-In order to make these models perform better, a good idea is to tweak the hyperparameters. I used, in fact, the models in a plain fashion, but more work can be done modifying general parameters like regularization strenght, or more specific ones like the maximum depth of the regression trees for the simple regression tree and the random forest models.
+As I can see from the results, the best regressor overall is random forest, since both RMSE on test set and cross validation loss are very low.
+The RMSE on training data is lower in every examined case; this was quite predictable, since it's clear that the model trained on the training set is not perfectly suitable also for data on the test set. It's a good sign, though, that for the most part of the regressor it's lower but not too much: this means that a correct tradeoff between bias and variance has been found.
+
+In order to make these models perform better, a good idea is to tweak the models hyperparameters. I used, in fact, the models in a plain fashion, but more work can be done modifying general parameters like regularization strenght, or more specific ones like the maximum depth of the regression trees for the simple regression tree and the random forest models.
 
 ## Problem 4
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  14 NOV 2021 22:37
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  15 NOV 2021 16:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -833,7 +833,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 169.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 145.
 File: img/first_graph.png Graphic file (type bmp)
 <img/first_graph.png>
 [1
@@ -848,43 +848,38 @@ File: img/casual_hist.png Graphic file (type bmp)
 [2]
 File: img/pie_chart.png Graphic file (type bmp)
 <img/pie_chart.png>
-[3]
+[3] [4]
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 340.
+(Font)              scaled to size 7.0pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 340.
+(Font)              scaled to size 5.0pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00092pt on input line 340.
+(Font)              scaled to size 10.00092pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00064pt on input line 340.
+(Font)              scaled to size 7.00064pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 340.
+(Font)              scaled to size 5.00046pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 340.
+(Font)              scaled to size 9.99893pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 340.
+(Font)              scaled to size 6.99925pt on input line 333.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 340.
+(Font)              scaled to size 4.99947pt on input line 333.
 
 Package amsfonts Warning: Obsolete command \bold; \mathbf should be used instea
-d on input line 340.
+d on input line 333.
 
-[4]
 File: img/deg1.png Graphic file (type bmp)
 <img/deg1.png>
 File: img/deg10.png Graphic file (type bmp)
 <img/deg10.png>
-
-Overfull \vbox (1.4728pt too high) detected at line 424
- []
-
 [5]
-Overfull \hbox (8.19054pt too wide) in alignment at lines 442--458
+Overfull \hbox (8.19054pt too wide) in alignment at lines 436--452
  [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (8.19054pt too wide) in alignment at lines 458--471
+Overfull \hbox (8.19054pt too wide) in alignment at lines 452--465
  [] [] [] [] [] [] 
  []
 
@@ -899,6 +894,6 @@ Here is how much of TeX's memory you used:
  38178 multiletter control sequences out of 15000+600000
  409865 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 98i,7n,122p,508b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 98i,7n,122p,508b,397s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on doc.pdf (9 pages).

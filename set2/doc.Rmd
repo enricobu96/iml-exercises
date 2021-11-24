@@ -168,3 +168,37 @@ In the paper the authors compare, as just said, a generative model and a discrim
 ### Task c
 
 The graphs report the relation between $m$, that is the the number of independent and identically distributed random samples, and the generalization error for both Naïve Bayes and Logistic Regression. From the graphs we can easily see that there's not a model that *always* performs better than the other: in fact, for most of the analyzed variables NB performs better than Logistic Regression, since the error is smaller; for some other variables, though, for instance `liver disorders` and `lenses`, Logistic Regression regression starts performing better from a certain high $m$. This is in line with what the authors stated in the introduction.
+
+## Problem 11
+
+## Problem 12
+
+For this task I decided to study equation (8.5), _i.e._ classification error rate, that is defined as $$E = 1 − max_{k}(\hat{p}_{mk})$$
+
+### Task a
+
+Note: the decision tree is reported at the end of this section.
+First of all, we have this.
+
+![Original](img/t12/1.png){width=300px}
+
+In this space we have 15 zeros and 8 ones, with a total of 23 elements. The initial classification error rate is then $$E_{orig} = 1 - max(\frac{15}{23}; \frac{8}{23})$$ and therefore $E_{orig} = \frac{8}{23}$.
+
+Then, we have to split the data in a way that minimizes the error rate; since it's difficult to calculate every error rate, I divided it in the way that seemed to be the best (as also said in the exercise text) and I calculated the error a posteriori (even if the algorithm does the inverse); I obtained this partition:
+
+![First partition](img/t12/2.png){width=300px}
+
+Here the error rate is $$E_{part1} = 1 - max(\frac{8}{15}; \frac{7}{15}) = \frac{7}{15}$
+
+Then, we repeat the procedure with another partition:
+
+![Second partition](img/t12/3.png){width=300px}
+
+And another one: 
+
+![Third partition](img/t12/4.png){width=300px}
+
+In the end, we get error rate equals to 0, since there are no partitions with different elements.
+The decision tree of this procedure is the following:
+
+![Decision tree](img/t12/tree.png){width=300px}

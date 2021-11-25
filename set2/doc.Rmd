@@ -170,7 +170,6 @@ In the paper the authors compare, as just said, a generative model and a discrim
 The graphs report the relation between $m$, that is the the number of independent and identically distributed random samples, and the generalization error for both Naïve Bayes and Logistic Regression. From the graphs we can easily see that there's not a model that *always* performs better than the other: in fact, for most of the analyzed variables NB performs better than Logistic Regression, since the error is smaller; for some other variables, though, for instance `liver disorders` and `lenses`, Logistic Regression regression starts performing better from a certain high $m$. This is in line with what the authors stated in the introduction.
 
 ## Problem 11
-
 ## Problem 12
 
 For this task I decided to study equation (8.5), _i.e._ classification error rate, that is defined as $$E = 1 − max_{k}(\hat{p}_{mk})$$
@@ -202,3 +201,54 @@ In the end, we get error rate equals to 0, since there are no partitions with di
 The decision tree of this procedure is the following:
 
 ![Decision tree](img/t12/tree.png){width=300px}
+
+## Problem 13
+## Problem 14
+
+For this taks I used python with `sklearn`'s `SVC` classifier. First of all, I loaded the two datasets into two different variables; then, I reshaped `x1` both on the training set and on the data set, since `sklearn` needed it because we have only one feature (`x1`). 
+
+### Task a
+
+First of all I fitted the data on a `SVC` classifier with `kernel=linear`, and I have ascertained that the accuracy score was $0.62=62%$. In order to prove that there are no hopes that the linear kernel performing well, I tuned two different parameters; to be more specific, I tried:
+
+- `C`, that is the `cost` parameter for `sklearn` = [1, 5, 10, 20, 50, 100]
+- `tol`, that is the tolerance for stopping criterion = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1].
+
+I applied this simple code for both:
+
+```python
+for c in [1,5,10,20,50,100]:
+    clf = SVC(kernel='linear', C=c).fit(X_train, y_train)
+    print(clf.score(X_test, y_test))
+```
+
+From the results I discovered that I can not overcome $0.62$ in accuracy score: the only different result I got was with `tol` = 1, and in this case I got $0.61$ of accuracy score (and this is trivial, since the algorithm stopped before reaching the maximum accuracy score).
+
+After this I tried with `kernel=rbf` as requested, and I found that the accuracy grows: from $0.62$ of the linear kernel, I got an accuracy equals to $0.78$ on a plain rbf kernel. I then tweaked again the hyperparameters; to be more precise, I modified:
+
+- `C` = [1, 5, 10, 20, 50, 100]
+- `tol` = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]
+- `gamma` = {scale, auto}. This is the kernel coefficient; with `gamma=scale` the classificator uses $\frac{1}{n_features * X.var()}$ as coefficient, while with `gamma=auto` it uses $\frac{1}{n_features}$. I tried the two different gammas in combination with the two other parameters above.
+
+I got these results changing `C`:
+
+| C | gamma | Accuracy |
+|---|---|---|
+| 1 | scale | 0.78 |
+| 5 | scale | 0.8 |
+| 10 | scale | 0.8 |
+| 20 | scale | 0.805 |
+| 50 | scale | 0.805 |
+| 100 | scale | 0.8 |
+| 1 | auto | 0.8 |
+| 5 | auto | 0.805 |
+| 10 | auto | 0.805 |
+| 20 | auto | 0.8 |
+| 50 | auto | 0.8 |
+| 100 | auto | 0.8 |
+
+Changin `tol` apparently does not change accuracy; this is due to the fact that the algorithm converges even with low tolerance levels.
+
+### Task b
+
+I created another column with the new covariate $x_2=X_1^2$ to both the training and the test set, as requested; I then fitted the model with this data and I got an accuracy score of $0.8$.

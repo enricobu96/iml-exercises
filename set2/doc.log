@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  24 NOV 2021 19:08
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/Arch Linux) (preloaded format=xelatex 2021.7.26)  26 NOV 2021 18:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -870,14 +870,26 @@ File: img/t12/4.png Graphic file (type bmp)
 <img/t12/4.png>
 File: img/t12/tree.png Graphic file (type bmp)
 <img/t12/tree.png>
-[5] [6] [7] (./doc.aux) ) 
+[5] [6]
+File: img/knn.png Graphic file (type bmp)
+<img/knn.png>
+File: img/1nn.png Graphic file (type bmp)
+<img/1nn.png>
+File: img/3nn.png Graphic file (type bmp)
+<img/3nn.png>
+[7] [8]
+File: img/svm.png Graphic file (type bmp)
+<img/svm.png>
+File: img/svm_boundary.png Graphic file (type bmp)
+<img/svm_boundary.png>
+[9] [10] [11] (./doc.aux) ) 
 Here is how much of TeX's memory you used:
- 18443 strings out of 476919
- 323645 string characters out of 5827674
- 820605 words of memory out of 5000000
- 38156 multiletter control sequences out of 15000+600000
+ 18488 strings out of 476919
+ 324192 string characters out of 5827674
+ 821880 words of memory out of 5000000
+ 38196 multiletter control sequences out of 15000+600000
  409857 words of font info for 77 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 98i,7n,122p,508b,379s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 98i,7n,122p,508b,395s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on doc.pdf (7 pages).
+Output written on doc.pdf (11 pages).

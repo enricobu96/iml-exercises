@@ -9,7 +9,7 @@ output:
 
 ### Task a
 
-The means and the standard deviations for each of the attributes can be easily calculated using embedded function; for instance, I used the `mean()` and `std()` functions from `pandas`. First of all, I separated the training set into two different dataframes (each one containing only one category, `Adelie` or `notAdelie`), and then I applied the functions on each column. The results are reported in the following tables:
+The means and the standard deviations for each of the attributes can be easily calculated using embedded functions; for instance, I used the `mean()` and `std()` functions from `pandas`. First of all, I separated the training set into two different dataframes (each one containing only one category, `Adelie` or `notAdelie`), and then I applied the functions on each column. The results are reported in the following tables:
 
 #### Class `Adelie`
 
@@ -71,7 +71,7 @@ def classify(row):
 
 Where `prior_adelie` and `prior_notadelie` are the prior probabilities of, respectively, `Adelie` and `notAdelie` (calculated in Task a); `pdf` is the method that returns the probability density function.
 
-Finally, I calculated the accuracy of the classifier simply counting the number of "right" answers, iterating on the rows of the test set, and dividing it for the number of total samples of the test set:
+Finally, I calculated the accuracy of the classifier simply counting the number of "right" answers, iterating on the rows of the test set, and dividing it by the number of total samples of the test set:
 
 ```python
 right = 0
@@ -92,10 +92,10 @@ For this task I used Python with `scikit-learn` library for Logistic Regression.
 
 The model coefficients I got are the following:
 
-- $\beta$ = (1.57894316, -0.979289548e,  0.00101773624,  0.0510530046)
+- $\beta$ = (1.57894316, -0.979289548,  0.00101773624,  0.0510530046)
 - intercept = 0.0364156
 
-I got accuracy equal to $1.0 = 100%$ on the training set and equal to $0.987 = 98.7%$ on the test set.
+I got accuracy equal to 1.0 = 100% on the training set and equal to 0.987 = 98.7% on the test set.
 
 In order to plot the datapoints and the curve, since `scikit-learn` does not have a function to plot linear responses with multiple feature (in this case we have four features), I wrote a simple function that calculated the linear reponse given the data, the coefficients and the intercept term:
 
@@ -180,6 +180,33 @@ Anyway, the Naïve Bayes assumption is not mandatory to be respected to have a f
 
 First of all, I generated a test data set of 10000 points and 10 training data sets of different sizes using the formulas reported by the task text (using `numpy.randrange` and `numpy.choice`). I'm not reporting the code for that because it's really messy, but basically I drew a `y` with probability $0.55$ to be $1$ and probability $0.45$ to be $0$, and then I drew a random number from 0 to 5 with the reported probabilities in order to generate the $x_1$ and $x_2$ values.
 
+After generating the datasets, I trained five different models, using for most of them `sklearn`:
+
+- Naïve Bayes
+- Logistic Regression without interaction term
+- Logistic Regression with interaction term: in this case I used the same library but I temporarilt added a column with the interaction term $x_1x_2$
+- SVM classifier
+- Dummy classifier, that returns probability equals to 0.55 independently from the features
+
+I then plotted the accuracies, that are represented in the following figure, in relation to the dimension of the training dataset:
+\newpage
+
+![Accuracies for the different classifiers for different training sets](img/p11_accuracies.png){width=450px}
+
+I tried to calculate the perplexities, but I got really weird results.
+
+### Task c
+
+A brief summary of which models are discriminative and which are generative is given by the table below:
+
+| **Model** | **Type** |
+|---|---|
+| Naive Bayes | Generative |
+| Logistic Regression | Discriminative |
+| SVM | Discriminative |
+| Dummy classifier | Generative |
+
+In my case, Logistic Regression with interaction term did not respect what expected: its accuracy is, in fact, mediocre with respect to the other models. The reason of this behavior is probably the fact that the "real" interaction term is not just a multiplication (it can be any other linear operation). As expected, the best model is Naïve Bayes indeed.
 
 
 ## Problem 12
@@ -191,19 +218,23 @@ For this task I decided to study equation (8.5), _i.e._ classification error rat
 Note: the decision tree is reported at the end of this section.
 First of all, we have this.
 
-![Original](img/t12/1.png){width=300px}
+\newpage
+
+![Original](img/t12/1.png){width=280px}
 
 In this space we have 15 zeros and 8 ones, with a total of 23 elements. The initial classification error rate is then $$E_{orig} = 1 - max(\frac{15}{23}; \frac{8}{23})$$ and therefore $E_{orig} = \frac{8}{23}$.
 
 Then, we have to split the data in a way that minimizes the error rate; since it's difficult to calculate every error rate, I divided it in the way that seemed to be the best (as also said in the exercise text) and I calculated the error a posteriori (even if the algorithm does the inverse); I obtained this partition:
 
-![First partition](img/t12/2.png){width=300px}
+![First partition](img/t12/2.png){width=280px}
 
 Here the error rate is $$E_{part1} = 1 - max(\frac{8}{15}; \frac{7}{15}) = \frac{7}{15}$
 
 Then, we repeat the procedure with another partition:
 
-![Second partition](img/t12/3.png){width=300px}
+![Second partition](img/t12/3.png){width=280px}
+
+\newpage
 
 And another one: 
 
@@ -221,6 +252,8 @@ The decision tree of this procedure is the following:
 First of all, I plotted the points with `matplotlib`; the black points are the ones with class `+1` and the red ones are the ones with class `-1`.
 
 ![Dataset D](img/knn.png){width=260px}
+
+\newpage
 
 The `k` hyperparameter tunes the complexity of the hypothesis space: if `k=1` we have a `1-NN` classifier, and this means that every training sample has its own neighborhood; in other words, every point has its own neighborhood. The classification boundaries for `1-NN` are, therefore, the ones in the following image:
 
@@ -247,7 +280,7 @@ For this taks I used python with `sklearn`'s `SVC` classifier. First of all, I l
 
 ### Task a
 
-First of all I fitted the data on a `SVC` classifier with `kernel=linear`, and I have ascertained that the accuracy score was $0.62=62%$. In order to prove that there are no hopes that the linear kernel performing well, I tuned two different parameters; to be more specific, I tried:
+First of all I fitted the data on a `SVC` classifier with `kernel=linear`, and I have ascertained that the accuracy score was 0.62=62%. In order to prove that there are no hopes that the linear kernel performing well, I tuned two different parameters; to be more specific, I tried:
 
 - `C`, that is the `cost` parameter for `sklearn` = [1, 5, 10, 20, 50, 100]
 - `tol`, that is the tolerance for stopping criterion = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1].
@@ -260,13 +293,13 @@ for c in [1,5,10,20,50,100]:
     print(clf.score(X_test, y_test))
 ```
 
-From the results I discovered that I can not overcome $0.62$ in accuracy score: the only different result I got was with `tol` = 1, and in this case I got $0.61$ of accuracy score (and this is trivial, since the algorithm stopped before reaching the maximum accuracy score).
+From the results I discovered that I can not overcome 0.62 in accuracy score: the only different result I got was with `tol` = 1, and in this case I got 0.61 of accuracy score (and this is trivial, since the algorithm stopped before reaching the maximum accuracy score).
 
-After this I tried with `kernel=rbf` as requested, and I found that the accuracy grows: from $0.62$ of the linear kernel, I got an accuracy equals to $0.78$ on a plain rbf kernel. I then tweaked again the hyperparameters; to be more precise, I modified:
+After this I tried with `kernel=rbf` as requested, and I found that the accuracy grows: from 0.62 of the linear kernel, I got an accuracy equals to 0.78 on a plain rbf kernel. I then tweaked again the hyperparameters; to be more precise, I modified:
 
 - `C` = [1, 5, 10, 20, 50, 100]
 - `tol` = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]
-- `gamma` = {scale, auto}. This is the kernel coefficient; with `gamma=scale` the classificator uses $\frac{1}{n_features * X.var()}$ as coefficient, while with `gamma=auto` it uses $\frac{1}{n_features}$. I tried the two different gammas in combination with the two other parameters above.
+- `gamma` = {scale, auto}. This is the kernel coefficient; with `gamma=scale` the classificator uses $\frac{1}{n features * X.var()}$ as coefficient, while with `gamma=auto` it uses $\frac{1}{n features}$. I tried the two different gammas in combination with the two other parameters above.
 
 I got these results changing `C`:
 
@@ -289,7 +322,7 @@ Changin `tol` apparently does not change accuracy; this is due to the fact that 
 
 ### Task b
 
-I created another column with the new covariate $x_2=X_1^2$ to both the training and the test set, as requested; I then fitted the model with this data and I got an accuracy score of $0.8$.
+I created another column with the new covariate $x_2=x_1^2$ to both the training and the test set, as requested; I then fitted the model with this data and I got an accuracy score of 0.8.
 Below there is the scatter plot of the points; the red points are the ones with class `-1` and the black ones are the ones with class `1`. Note: the red points are shifted by 10 on the y-axis since they were hidden by the black ones.
 
 ![SVM scatter plot](img/svm.png){width=300px}

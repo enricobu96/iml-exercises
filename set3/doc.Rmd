@@ -161,3 +161,4 @@ The minimum loss I got was $10845.407939650557$, and the maximum $10878.13091095
 I did not try with a smart initializations due to my really not powerful laptop (it was in fact taking really too long to execute). However, with a smarter initialization I would expect to have even more occurrencies with the smallest loss.
 
 ## Task d
+

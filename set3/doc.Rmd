@@ -89,3 +89,75 @@ The algorithm works as follows:
 - In step 4, it chooses a clustering of `5` and (`3`,`4`), with a joint cost of $3.28$, that is the distance between `4` and `5`;
 - In step 5, it chooses a clustering of (`5`,(`3`,`4`)) and (`6`,`7`), with a joint cost of $4.79$, that is the distance between `3` and `7`;
 - In step 6, it chooses the final clustering with a joint cost of $8.04$, that is the distance between `1` and `7`.
+
+# Problem 18
+
+## Task a
+
+After having opportunely pre-processed the data, I tried first to cluster the rows of the original data matrix, _i.e._ without any column normalization. The results I got were in line with what I expected: the loss were very high for every number of clusters, but it went down with a larger number of clusters.
+After this, I did the same with the normalized data, and I plotted the curves for both the cases; in order to do that I used `sklearn` with the following code:
+
+```python
+scaled = preprocessing.scale(
+  training_set[training_set.columns.difference(['class4'])]
+  )
+for i in range(1, 21):
+    km = KMeans(n_clusters=i).fit(
+      training_set[training_set.columns.difference(['class4'])]
+      )
+    toplotY_un.append(
+      -1*km.score(
+        training_set[training_set.columns.difference(['class4'])]
+        )
+      )
+    toplotX_un.append(str(i))
+
+    km = KMeans(n_clusters=i).fit(scaled)
+    toplotY_sc.append(-1*km.score(scaled))
+    toplotX_sc.append(str(i))
+```
+
+The plot with both cureves is the following:
+
+![Number of clusters in function with value of loss](img/kmeansnorm.png){width=320px}
+
+The normalization had a huge effect on the result: the loss has, in fact, more or less the same value for every cluster. However, from the graph above it is not clear that the loss is actually different with different numbers of clusters (due to the fact that the highest losses for non-normalized data are really larger). For the sake of clarity, I am also reporting the losses for normalized data:
+
+| Number of clusters | Loss | | Number of clusters | Loss |
+|---|---|---|---|---|
+| 1 | 22899.999999999993 |  | 11 | 7329.800582322089 |
+| 2 | 15869.168844721906 |  | 12 | 7044.47080452127 |
+| 3 | 13147.730831928027 |  | 13 | 6792.264272305343 |
+| 4 | 10845.54542406677 | | 14 | 6661.316485423587 |
+| 5 | 9721.85276196181 |  | 15 | 6434.96222248738 |
+| 6 | 9114.481702253473 | | 16 | 6229.296165524172 |
+| 7 | 8710.037463131892 | | 17 | 6154.216707369852 |
+| 8 | 8267.927506498807 | | 18 | 6080.210374598219 |
+| 9 | 7896.641887813164 | | 19 | 5832.040716217323 |
+| 10 | 7608.535772259967 |  | 20 | 5701.86207865343 |
+
+## Task b
+
+I used the scaled variables to build a k-means clustering with `sklearn` with the following code:
+
+```python
+km = KMeans(n_clusters=4).fit(scaled)
+```
+
+Then I plotted the confusion matrix with the predicted values in function of the actual cluster and I reordered them as asked in order to maximize the sum on the left-to-right diagonal; the final result I got is this:
+
+![Confusion matrix with maximized sum of diagonal](img/cmatrix.png){width=350px}
+
+From this matrix it's pretty clear that the most errors happen were the values outside the diagonal are higher. This is particularly true for the last row, _i.e._ for the fourth class (`II` in this dataset): the first, second and third values are in fact wrong "predictions" with a really high count.
+
+## Task c
+
+For this task I repeated the code of the task above for 1000 times; since I was using `sklearn`, I used the `init=random` flag in the KMeans constructor. For each execution I saved the loss, and for the entire execution I found the minimum and the maximum losses. The resulting histogram I got is the following: 
+
+![Histogram of the losses for 1000 different random initializations](img/histlosses.png){width=350px}
+
+The minimum loss I got was $10845.407939650557$, and the maximum $10878.13091095091$. Since the minimum and the maximum are really near and the loss is the minimum for most of the repetitions, it is not that difficult to find an optimal result: only a few executions should work.
+
+I did not try with a smart initializations due to my really not powerful laptop (it was in fact taking really too long to execute). However, with a smarter initialization I would expect to have even more occurrencies with the smallest loss.
+
+## Task d

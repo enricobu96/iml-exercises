@@ -162,3 +162,117 @@ I did not try with a smart initializations due to my really not powerful laptop 
 
 ## Task d
 
+I tried clustering the data with agglomerative hierarchical clustering. I tried both with complete linkage and single linkage, and I plotted the dendrograms using the [this function from Sklearn (click)](https://scikit-learn.org/stable/auto_examples/cluster/plot_agglomerative_dendrogram.html). The dendrogram for the clustering with complete linkage I got is the following:
+
+![Dendrogram for hierarchical clustering with complete linkage](img/dendrocomplete.png){width=300px}
+
+The dendrogram for the clustering with single linkage I got is the following:
+
+![Dendrogram for hierarchical clustering with single linkage](img/dendrosingle.png){width=300px}
+
+Both the agglomerative clusterings I performed turned out to be binary clusterings, _i.e._ the number of clusters was two for both. This was probably due to the standard implementation of `AgglomerativeClustering` class from `sklearn`, and I noticed it from the confusion matrices I plotted initially: most of the samples were, in fact, in cluster 0, while only some of them were in in cluster 1 (and there were no samples in the other two clusters). Consequently, I tried forcing the number of clusters putting `n_clusters=4` as a hyperparameter to the AgglomerativeClustering constructor. The results I got made a lot more sense; these are reported below as confusion matrices.
+
+![Confusion matrix for hierarchical clustering with complete linkage](img/cmatrixcomp.png){width=320px}
+
+\newpage
+
+![Confusion matrix for hierarchical clustering with single linkage](img/cmatrixsing.png){width=320px}
+
+# Problem 19
+
+## Task a
+
+First of all, as always a pre-processed a little the data and I scaled the entire dataset using `sklearn`'s `StandardScaler`. Then I decided to plot the PCA as a biplot using the following function, that is a slight modification of [this function on stackoverflow (click)](https://stackoverflow.com/questions/39216897/plot-pca-loadings-and-loading-in-biplot-in-sklearn-like-rs-autoplot):
+
+```python
+def biplot(score,coeff,labels=None):
+    xs = score[:,0]
+    ys = score[:,1]
+    n = coeff.shape[0]
+    scalex = 1.0/(xs.max() - xs.min())
+    scaley = 1.0/(ys.max() - ys.min())
+    plt.scatter(xs * scalex,ys * scaley, c = y, s=5)
+    for i in range(n):
+        plt.arrow(0, 0, coeff[i,0], coeff[i,1],color = 'r',alpha = 0.5)
+        if labels is None:
+            plt.text(
+              coeff[i,0]* 1.15, 
+              coeff[i,1] * 1.15, 
+              "Var"+str(i+1), 
+              color = 'g', 
+              ha = 'center', 
+              va = 'center'
+              )
+        else:
+            plt.text(
+              coeff[i,0]* 1.15,
+              coeff[i,1] * 1.15, 
+              labels[i], 
+              color = 'g', 
+              ha = 'center', 
+              va = 'center'
+              )
+    plt.xlim(-0.5,0.75)
+    plt.ylim(-.75,.75)
+    plt.xlabel("PC{}".format(1))
+    plt.ylabel("PC{}".format(2))
+    plt.grid()
+```
+
+The result I got is the following; note: purple points are `nonevent`, green are `Ia`, yellow are `Ib` and blue are `II`: 
+
+![Biplot for the current dataset](img/pcabi.png){width=400px}
+
+## Task b
+
+In order to plot both the percentage and the cumulative percentage of variance explained I used `sklearn`'s `PCA` attributes; the following code calculates the percentages from the first to the tenth point (including other points would have been useless since the percentage of variance explained of them is zero):
+
+```python
+x = []
+y_down = []
+y_up = []
+sum = 0
+
+pca = model.fit(X)
+
+for i in range(10):
+    x.append(str(i+1))
+    y_down.append(pca.explained_variance_ratio_[i])
+    sum += pca.explained_variance_ratio_[i]
+    y_up.append(sum)
+```
+
+Plotting the points I got the following result:
+
+![Percentage and cumulative percentage of variance explained with unscaled data](img/varianceunscaled.png){width=350px}
+
+Then I repeated the same but with the data scaled to zero mean and unit variance; in order to scaled the data I used the following code:
+
+```python
+x_scaled = preprocessing.scale(X)
+```
+
+with `preprocessing` being a `sklearn` in-built function. The result I got was the following (both the percentages are calculated on the first 30 points for the same reason as before):
+
+![Percentage and cumulative percentage of variance explained with scaled data](img/variancescaled.png){width=350px}
+
+As expected, both curves change differently in the two scenarios: for unscaled data, most of the variance is explained by the first **2/3 features**; for unscaled data, on the other hand, almost the whole variance is explained by the first **30 features**. The reason for this phenomenon is that the first variables, as they are represented in the dataset, have a high variance; hence, it is trivial that the biggest part of variance is explained by them. After the scaling to zero mean and unit variance, the variance explained by them naturally decreased because they are, in fact, scaled.
+
+## Task c
+
+For this task I used a simple Logistic Regression from `sklearn`, with only one different hyperparameter, that is `max_iter=1000` in order to not make the model reach the maximum number of iterations. As performance metric I decided to use binary accuracy score.
+Without any PCA I got an accuracy of $0.813$; then, I tried performing PCA with different number of components (`n_components`), from 1 to 100. In order to perform PCA, I first scaled the data to zero mean and unit variance as I did before; in order to see the effect of the feature reduction, I decided to plot the accuracy in function with the number of components. The result I got is the following:
+
+![Binary accuracy in function with number of PCA components](img/accuracypca.png){width=350px}
+
+Both from this graph and for the additional code I wrote to get the best number of components, it is pretty clear that the accuracy can be higher with less features, and indeed it is so: I got the best accuracy, that is $0.859$ with $21$ features.
+
+# Problem 20
+
+From this exercise set and from the course in general I received a good overview of unsupervised learning, in particular clustering and hierarchical clustering; of these topics I found also interesting to study different algorithms, such as Lloyd's algorithm's vs plain k-means algorithm and the different linkage methods for hierarchical clustering.
+
+I also learned dimensionality reduction techniques that are actually used in a production environment, such as PCA; this was also particularly useful for the term project.
+
+This time I think I understood correctly all the topics of this section; however, I still have some problems with "putting into code" some ideas I have.
+
+As for the other sections of this course, I think everything we have done is a good overview of machine learning and its typical techniques, then I think that everything is relevant for other studies and future work.
